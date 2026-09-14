@@ -77,6 +77,7 @@ def get_base_dir():
         cache_dir = os.path.join(home_dir, ".cache")
         nanochat_dir = os.path.join(cache_dir, "nanochat")
     os.makedirs(nanochat_dir, exist_ok=True)
+    # print(nanochat_dir)
     return nanochat_dir
 
 def download_file_with_lock(url, filename, postprocess_fn=None):
