@@ -98,10 +98,14 @@ if not HAS_FA3:
 # model trained after mid training will be saved in chats_sft, pre-trained model will be loaded in base
 # make sure to define model tag in script 
 training_regiment = args.training_regiment
-if training_regiment == "mid_training":
-    model, tokenizer, meta = load_model("base", device, phase="train", model_tag=args.model_tag, step=args.model_step)
-elif training_regiment == "sft":
-    model, tokenizer, meta = load_model("sft", device, phase="train", model_tag=args.model_tag, step=args.model_step)
+
+if training_regiment == "mid_training": 
+    model_dir_is = "base"
+    model_dir_is = "sft"
+else:
+    model_dir_is = "base"
+
+model, tokenizer, meta = load_model(model_dir_is, device, phase="train", model_tag=args.model_tag, step=args.model_step)
 
 # Inherit training hyperparameters from pretrained checkpoint (None = inherit, explicit value = override)
 pretrain_user_config = meta.get("user_config", {})
@@ -145,9 +149,10 @@ optimizer = model.setup_optimizer(unembedding_lr=args.unembedding_lr, embedding_
 # Note: load_state_dict overwrites param_group metadata (LRs, betas, etc.) with the
 # pretrained values. Since pretraining warmdown brings LRs to ~0, we must save and
 # restore our fresh SFT LRs after loading.
+
 base_dir = get_base_dir()
 if args.load_optimizer:
-    optimizer_data = load_optimizer_state("base", device, rank=ddp_rank, model_tag=args.model_tag, step=args.model_step)
+    optimizer_data = load_optimizer_state(model_dir_is, device, rank=ddp_rank, model_tag=args.model_tag, step=args.model_step)
     if optimizer_data is not None:
         base_lrs = [group["lr"] for group in optimizer.param_groups]
         optimizer.load_state_dict(optimizer_data)
