@@ -101,6 +101,7 @@ training_regiment = args.training_regiment
 
 if training_regiment == "mid_training": 
     model_dir_is = "base"
+elif training_regiment == "sft":
     model_dir_is = "sft"
 else:
     model_dir_is = "base"
