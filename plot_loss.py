@@ -29,4 +29,4 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 
-plt.savefig("bpb_loss_plot.png")
+plt.savefig("bpb_loss_plot_smooth.png")
